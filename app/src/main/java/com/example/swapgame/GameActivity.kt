@@ -206,7 +206,18 @@ class GameActivity : AppCompatActivity() {
             
             if (abs(diffX) > abs(diffY)) {
                 if (abs(diffX) > SWIPE_THRESHOLD_PX && abs(velocityX) > SWIPE_VELOCITY_THRESHOLD_PX_PER_SEC) {
-                    swapPage()
+                    // Check swipe direction and only change page if moving in valid direction
+                    if (diffX > 0) {
+                        // Swiping right - only move to Droite if currently on Gauche
+                        if (currentPage == "Gauche") {
+                            swapPage()
+                        }
+                    } else {
+                        // Swiping left - only move to Gauche if currently on Droite
+                        if (currentPage == "Droite") {
+                            swapPage()
+                        }
+                    }
                     return true
                 }
             }
