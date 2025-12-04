@@ -94,8 +94,8 @@ class GameActivity : AppCompatActivity() {
                 
                 tvCountdown.text = timeRemaining.toString()
                 
-                // Hide countdown after 5 seconds (when timeRemaining is 5)
-                if (timeRemaining == 5) {
+                // Hide countdown when reaching 5 seconds
+                if (timeRemaining <= 5) {
                     tvCountdown.visibility = View.INVISIBLE
                 }
                 
@@ -147,7 +147,7 @@ class GameActivity : AppCompatActivity() {
         isFrozen = false
         gameContainer.setBackgroundColor(Color.WHITE)
         
-        // Only show countdown if it should still be visible
+        // Only show countdown if it should still be visible (timeRemaining > 5)
         if (timeRemaining > 5) {
             tvCountdown.visibility = View.VISIBLE
         }
