@@ -8,6 +8,7 @@ import android.os.Looper
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +18,8 @@ import kotlin.math.abs
 class GameActivity : AppCompatActivity() {
     private lateinit var tvCountdown: TextView
     private lateinit var tvPageIndicator: TextView
+    private lateinit var btnLeft: Button
+    private lateinit var btnRight: Button
     private lateinit var gameContainer: ConstraintLayout
     private lateinit var gestureDetector: GestureDetector
     
@@ -43,10 +46,24 @@ class GameActivity : AppCompatActivity() {
         
         tvCountdown = findViewById(R.id.tv_countdown)
         tvPageIndicator = findViewById(R.id.tv_page_indicator)
+        btnLeft = findViewById(R.id.btn_left)
+        btnRight = findViewById(R.id.btn_right)
         gameContainer = findViewById(R.id.game_container)
         
         // Initialize gesture detector for swipe detection
         gestureDetector = GestureDetector(this, SwipeGestureListener())
+        
+        btnLeft.setOnClickListener {
+            if (currentPage == "Droite") {
+                swapPage()
+            }
+        }
+
+        btnRight.setOnClickListener {
+            if (currentPage == "Gauche") {
+                swapPage()
+            }
+        }
         
         showInstructionPopup()
     }
@@ -133,6 +150,8 @@ class GameActivity : AppCompatActivity() {
         gameContainer.setBackgroundColor(Color.BLACK)
         tvCountdown.visibility = View.INVISIBLE
         tvPageIndicator.visibility = View.INVISIBLE
+        btnLeft.visibility = View.INVISIBLE
+        btnRight.visibility = View.INVISIBLE
         
         // Unfreeze after 1 second and auto-swap
         handler.postDelayed({
@@ -152,6 +171,8 @@ class GameActivity : AppCompatActivity() {
             tvCountdown.visibility = View.VISIBLE
         }
         tvPageIndicator.visibility = View.VISIBLE
+        btnLeft.visibility = View.VISIBLE
+        btnRight.visibility = View.VISIBLE
     }
     
     private fun performAutoSwap() {
