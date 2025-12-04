@@ -19,9 +19,9 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        val btnNewActivity = findViewById<Button>(R.id.btn_start_new_activity)
-        btnNewActivity.setOnClickListener {
-            val intent = Intent(this, SecondActivity::class.java)
+        val btnStart = findViewById<Button>(R.id.btn_start_new_activity)
+        btnStart.setOnClickListener {
+            val intent = Intent(this, GameActivity::class.java)
             startActivity(intent)
         }
     }
