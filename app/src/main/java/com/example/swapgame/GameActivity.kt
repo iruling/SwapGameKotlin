@@ -30,6 +30,13 @@ class GameActivity : AppCompatActivity() {
     private var lastSwapTime: Long = 0
     private var inactivityCheckRunnable: Runnable? = null
     
+    companion object {
+        private const val INACTIVITY_CHECK_INTERVAL_MS = 500L
+        private const val INACTIVITY_FREEZE_THRESHOLD_MS = 2000L
+        private const val SWIPE_THRESHOLD_PX = 100
+        private const val SWIPE_VELOCITY_THRESHOLD_PX_PER_SEC = 100
+    }
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
@@ -111,11 +118,11 @@ class GameActivity : AppCompatActivity() {
                 val timeSinceLastSwap = System.currentTimeMillis() - lastSwapTime
                 
                 // If no swap for 2 seconds, freeze the screen
-                if (timeSinceLastSwap >= 2000 && !isFrozen) {
+                if (timeSinceLastSwap >= INACTIVITY_FREEZE_THRESHOLD_MS && !isFrozen) {
                     freezeScreen()
                 }
                 
-                handler.postDelayed(this, 500) // Check every 500ms
+                handler.postDelayed(this, INACTIVITY_CHECK_INTERVAL_MS)
             }
         }
         inactivityCheckRunnable?.let { handler.post(it) }
@@ -185,10 +192,6 @@ class GameActivity : AppCompatActivity() {
     
     // Inner class for swipe gesture detection
     private inner class SwipeGestureListener : GestureDetector.SimpleOnGestureListener() {
-        // Minimum distance for a swipe (in pixels)
-        private val SWIPE_THRESHOLD = 100
-        // Minimum velocity for a swipe (in pixels per second)
-        private val SWIPE_VELOCITY_THRESHOLD = 100
         
         override fun onFling(
             e1: MotionEvent?,
@@ -202,7 +205,7 @@ class GameActivity : AppCompatActivity() {
             val diffY = e2.y - e1.y
             
             if (abs(diffX) > abs(diffY)) {
-                if (abs(diffX) > SWIPE_THRESHOLD && abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                if (abs(diffX) > SWIPE_THRESHOLD_PX && abs(velocityX) > SWIPE_VELOCITY_THRESHOLD_PX_PER_SEC) {
                     swapPage()
                     return true
                 }
