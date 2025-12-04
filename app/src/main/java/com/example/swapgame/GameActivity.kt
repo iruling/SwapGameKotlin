@@ -115,10 +115,10 @@ class GameActivity : AppCompatActivity() {
                     freezeScreen()
                 }
                 
-                handler.postDelayed(this, 100) // Check every 100ms
+                handler.postDelayed(this, 500) // Check every 500ms
             }
         }
-        handler.post(inactivityCheckRunnable!!)
+        inactivityCheckRunnable?.let { handler.post(it) }
     }
     
     private fun freezeScreen() {
@@ -185,7 +185,9 @@ class GameActivity : AppCompatActivity() {
     
     // Inner class for swipe gesture detection
     private inner class SwipeGestureListener : GestureDetector.SimpleOnGestureListener() {
+        // Minimum distance for a swipe (in pixels)
         private val SWIPE_THRESHOLD = 100
+        // Minimum velocity for a swipe (in pixels per second)
         private val SWIPE_VELOCITY_THRESHOLD = 100
         
         override fun onFling(
