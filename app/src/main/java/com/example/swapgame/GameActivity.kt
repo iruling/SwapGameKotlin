@@ -20,6 +20,7 @@ class GameActivity : AppCompatActivity() {
     private lateinit var tvPageIndicator: TextView
     private lateinit var btnLeft: Button
     private lateinit var btnRight: Button
+    private lateinit var btnRemoveIndication: Button
     private lateinit var gameContainer: ConstraintLayout
     private lateinit var gestureDetector: GestureDetector
     
@@ -28,6 +29,7 @@ class GameActivity : AppCompatActivity() {
     private var timeRemaining: Int = 10
     private var isFrozen: Boolean = false
     private var isGameEnded: Boolean = false
+    private var showIndications: Boolean = true
     
     private val handler = Handler(Looper.getMainLooper())
     private var lastSwapTime: Long = 0
@@ -48,6 +50,7 @@ class GameActivity : AppCompatActivity() {
         tvPageIndicator = findViewById(R.id.tv_page_indicator)
         btnLeft = findViewById(R.id.btn_left)
         btnRight = findViewById(R.id.btn_right)
+        btnRemoveIndication = findViewById(R.id.btn_remove_indication)
         gameContainer = findViewById(R.id.game_container)
         
         // Initialize gesture detector for swipe detection
@@ -63,6 +66,12 @@ class GameActivity : AppCompatActivity() {
             if (currentPage == "Gauche") {
                 swapPage()
             }
+        }
+
+        btnRemoveIndication.setOnClickListener {
+            showIndications = false
+            tvPageIndicator.visibility = View.INVISIBLE
+            btnRemoveIndication.visibility = View.GONE
         }
         
         showInstructionPopup()
@@ -152,6 +161,7 @@ class GameActivity : AppCompatActivity() {
         tvPageIndicator.visibility = View.INVISIBLE
         btnLeft.visibility = View.INVISIBLE
         btnRight.visibility = View.INVISIBLE
+        btnRemoveIndication.visibility = View.INVISIBLE
         
         // Unfreeze after 1 second and auto-swap
         handler.postDelayed({
@@ -170,7 +180,14 @@ class GameActivity : AppCompatActivity() {
         if (timeRemaining > 5) {
             tvCountdown.visibility = View.VISIBLE
         }
-        tvPageIndicator.visibility = View.VISIBLE
+        if (showIndications) {
+            tvPageIndicator.visibility = View.VISIBLE
+            btnRemoveIndication.visibility = View.VISIBLE
+        } else {
+            tvPageIndicator.visibility = View.INVISIBLE
+            btnRemoveIndication.visibility = View.GONE
+        }
+
         btnLeft.visibility = View.VISIBLE
         btnRight.visibility = View.VISIBLE
     }
